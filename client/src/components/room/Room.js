@@ -135,7 +135,13 @@ const Room = (props) => {
             initiator: false,
             trickle: false,
             stream,
-        })
+        },
+         {
+            host: "/",
+            path: "/peer",
+            port: 443,
+          }
+        );
 
         peer.on("signal", signal => {
             socketRef.current.emit("returning signal", { signal, callerID })
