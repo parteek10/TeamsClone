@@ -104,6 +104,12 @@ io.on("connection", (socket) => {
     {
       return socket.emit("all users",{error:"invalid link"});
     }
+    if(!user)
+    {
+
+      return socket.emit("error");
+
+    }
     console.log(socket.id);
     user['socketId']=socket.id;
     console.log(roomID);
