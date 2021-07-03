@@ -1,5 +1,4 @@
 body {
-  /* background: url("../../images/Abract01.png") !important; */
   background-size: cover !important;
 }
 
@@ -30,9 +29,11 @@ body {
   font-size: 2rem;
   font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
 }
+
 .form input {
   margin: 10px;
 }
+
 .form input[type="text"],
 input[type="password"],
 input[type="number"] {
@@ -41,6 +42,7 @@ input[type="number"] {
   padding: 10px;
   border-radius: 5px;
 }
+
 .form button {
   padding: 10px;
   margin: 10px;
@@ -50,10 +52,12 @@ label {
   color: skyblue;
   display: block;
 }
+
 .marker {
   margin: 90px auto;
   width: 20vw;
 }
+
 select {
   margin: 10px 20px;
   width: 50%;
@@ -65,13 +69,11 @@ select {
   font-size: 1rem;
   width: 100%;
   border-collapse: collapse;
-  /* border: 20px solid black; */
   
 }
 
 .cont td,
 .cont th {
-  /* border: 1px solid grey; */
   padding: 5px;
   align-items: center;
   font-size: 1.3rem;
@@ -88,7 +90,6 @@ select {
 }
 
 .cont th {
-  /* padding-top: 12px; */
   padding-bottom: 12px;
   text-align: left;
   background-color: skyblue;
@@ -136,6 +137,7 @@ select {
     
   }
 }
+
 @media screen and (max-width: 640px) {
   .box {
     height: 25vw !important;
@@ -152,6 +154,7 @@ select {
     width: 40vw !important;
   }
 }
+
 @media screen and (max-width: 480px) {
   .cont {
     grid-template-columns: 1fr !important;

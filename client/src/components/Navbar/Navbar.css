@@ -1,5 +1,4 @@
-.what
-{
+.what{
     font-family: var(--Abel);
     font-size: 5rem !important;
 }
@@ -15,41 +14,39 @@
     z-index: 9;
     position:fixed; 
     top:0;
-    
 }
 
-.logo
-{
+.logo{
     float:left;
 }
 
 .collapse{
     height: auto;
 }
+
 .nav .nav-brand a{
     font-size: 1.6rem;
     padding: 1rem 0;
     display: block;
-   font-family: var(--Abel);
+    font-family: var(--Abel);
     font-weight: bold;
     font-size: 1.6rem;
     float:left;
-    
-    /* text-decoration: none; */
 }
 
-.nav .nav-menu
-{
+.nav .nav-menu{
     justify-content: space-between;
 }
-.nav .nav-items{
-    
+
+.nav .nav-items{ 
     display:flex;
     margin:0;
 }
+
 .nav .nav-items .nav-link a{
     color:var(--text-light);
 }
+
 .nav .nav-items .nav-link{
     padding:1.6rem 1rem;
     font-size: 1.1rem;
@@ -57,68 +54,69 @@
     font-family: var(--Lexend);
         
 }
-.left
-{
+
+.left{
     padding:1.6rem 1rem;
     font-size: 1.1rem;
     position: relative;
     font-family: var(--Lexend);
     
 }
-.nav .nav-items .nav-link:hover
-{
+
+.nav .nav-items .nav-link:hover{
     background-color: var(--midnight);
 }
-.left:hover
-{
+
+.left:hover{
     background-color: var(--midnight);
 }
 
 .nav .nav-items .nav-link:hover a{
         color: white;
 }
-.nav .social
-{
+
+.nav .social{
     padding:  1.4rem 0;
 }
-.nav .social i
-{
+
+.nav .social i{
     padding:  0 .4rem;
     font-size:2rem;
 }
+
 .nav .social a{
     color:var(--text-light)
 }
+
 .text-grey{
     color: var(--text-grey);
 }
 
-.nav .toggle-collapse
-{
+.nav .toggle-collapse {
     position: absolute;
     top:0%;
     width: 97%;
     cursor: pointer;
 }
-.nav .toggle-collapse .toggle-icons
-{
+
+.nav .toggle-collapse .toggle-icons {
     display: flex;
     justify-content: flex-end;
     padding: 1.7rem 0rem;
     display: none;
 }
+
 .nav .toggle-collapse .toggle-icons i{
     font-size: 1.4rem;
     color: var(--bg-color);
 
 }
 
-.bold
-{
+.bold{
     font-size: 2rem !important;
 }
-.red
-{
+
+.red{
     color: skyblue;
     font-size: 1rem;
 }
@@ -130,9 +128,6 @@
     }
     .nav .toggle-collapse .toggle-icons
     {
-        
         display: flex;
-
     }
-   
 }

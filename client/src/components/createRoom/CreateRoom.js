@@ -7,7 +7,7 @@ const CreateRoom = (props) => {
         const id = uuid();
         props.history.push(`/room/${id}`);
     }
-
+    
     return (
        <Base>
         <button onClick={create}>Create room</button>

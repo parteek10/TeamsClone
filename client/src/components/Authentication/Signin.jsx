@@ -14,8 +14,6 @@ export default function Signin() {
 
     const [created, setCreated] = useState(false);
 
-    // const [url, setUrl] = useState("helo");
-
     const handleChange = (event) => {
         console.log(event);
         setUser({
@@ -30,16 +28,17 @@ export default function Signin() {
             const res = await axios.post(`/user/login`, userpost);
             console.log(res);
             if (res.data.error) {
-
                 window.alert(res.data.error);
                 return;
             }
+
             window.alert(res.data.messsage);
 
             authenticate({
                 token:
                     res.data.token,
             });
+
             setCreated(true);
 
         } catch (err) {
@@ -55,9 +54,7 @@ export default function Signin() {
     const onSubmit = (e) => {
         e.preventDefault();
         if (userpost.email.trim() !== "" && userpost.password.trim !== "") {
-
             postEvent();
-
         }
         else {
             window.alert("User details are  empty");

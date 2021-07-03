@@ -1,11 +1,9 @@
 const jwt = require("jsonwebtoken")
 const Register = require("../models/registers");
 
+//to veriffy weather user is login or not 
 const auth = async (req, res, next) => {
     try {
-        // console.log("before");
-        // console.log(req.auth);
-        // console.log("after");
         const token = req.cookies.jwt;
         console.log("token value is : " + token);
         const verifyUser = jwt.verify(token, process.env.SECRET_KEY);

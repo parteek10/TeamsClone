@@ -12,7 +12,6 @@ const Base = ({
              <div className="children" style={{marginTop:'100px'}} >
                 {children}
             </div>
-        
         </>
     );
 }

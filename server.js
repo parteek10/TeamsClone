@@ -28,7 +28,9 @@ const users = {};
 const socketToRoom = {};
 
 io.on('connection', socket => {
+
     socket.on("join room", roomID => {
+
         if (users[roomID]) {
             const length = users[roomID].length;
             if (length === 4) {
@@ -65,19 +67,6 @@ io.on('connection', socket => {
 });
 
 
-
-// server.get("/", (req, res) => {
-//     res.render("index");
-// })
-
-// server.get("/register", (req, res) => {
-//     res.render("register");
-// })
-
-// server.get("/secret", auth, (req, res) => {
-//     res.render("secret");
-// })
-
 app.get("/logout", auth, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((currEle) => {
@@ -87,7 +76,6 @@ app.get("/logout", auth, async (req, res) => {
         const user = await req.user.save();
 
         res.json({ "message": "logout Success" });
-        // res.render("login");
 
     } catch (error) {
         res.status(400).send(error);
@@ -95,10 +83,9 @@ app.get("/logout", auth, async (req, res) => {
 })
 
 app.post("/register", async (req, res) => {
-    console.log(req.body);
+
     if (!req.body.password || !req.body.email) {
         res.status(203).json({ message: "wrong credentials" });
-        // res.status(203).send(`${req.body.password}  ${req.body.confirmPassword} are not smae `);
     }
     else {
         const userData = new Register({
@@ -114,7 +101,6 @@ app.post("/register", async (req, res) => {
             console.log("Register data : ");
             console.log(registededData);
             res.json({ message: "register successful", userData })
-            // res.render("index");
         } catch (err) {
             console.log(err);
             res.status(404).send(err + " error while registration");
@@ -122,24 +108,23 @@ app.post("/register", async (req, res) => {
     }
 })
 
-// app.get("/login", (req, res) => {
-//     res.render("login");
-// })
 
 app.post("/user/login", async (req, res) => {
     try {
         const email = req.body.email;
         const password = req.body.password;
+
         const user = await Register.findOne({ email });
         const token = await user.getAuthToken();
+
         res.cookie("jwt", token, {
             expires: new Date(Date.now() + 400000),
             httpOnly: true
         });
 
         const isMatch = await bcrypt.compare(password, user.password);
+        
         if (isMatch == true) {
-            // res.status(200).render("index");
             res.status(200).json({ isMatch, token })
         } else {
             res.status(201).send("wrong login credentials")

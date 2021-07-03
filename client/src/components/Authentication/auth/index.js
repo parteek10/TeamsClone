@@ -1,9 +1,7 @@
 import axios from "axios";
 
-
 export const authenticate = (data, next) => {
   if (typeof window !== "undefined") {
-    
     localStorage.setItem("jwt", JSON.stringify(data));
     return;
   }
@@ -17,7 +15,6 @@ export const signout = async () => {
     };
   
   if (typeof window !== "undefined") {
-    // console.log(localStorage.getItem("jwt"));
     try {
         const res = await axios.get(`/logout`, config);
         localStorage.removeItem("jwt");
@@ -36,13 +33,11 @@ export const signout = async () => {
 };
 
 export const isAuthenticated = () => {
-  // console.log(localStorage.getItem("jwt"));
   if (typeof window == "undefined") {
     return false;
   }
 
   if (localStorage.getItem("jwt")) {
-    // console.log(localStorage.getItem("jwt"));
     return JSON.parse(localStorage.getItem("jwt"));
   } else {
     return false;

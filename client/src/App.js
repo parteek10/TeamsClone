@@ -14,9 +14,6 @@ function App() {
         <ProtectedRoute path="/room/:roomID" component={Room} />
         <Route path="/signin" exact component={Signin} />
         <Route path="/signup" exact component={Signup} />
-        {/* <Route path="/" exact component={CreateRoom} />
-        <Route path="/" exact component={CreateRoom} /> */}
-
       </Switch>
     </BrowserRouter>
   );

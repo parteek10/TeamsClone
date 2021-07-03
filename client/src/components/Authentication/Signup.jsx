@@ -3,10 +3,8 @@ import React, { useState } from 'react';
 import './style.css'
 
 import { Redirect } from 'react-router-dom';
-
 import Base from '../Base/Base';
 
-// import config from "../config.json";
 export default function Signup() {
 
     const [userpost, setUser] = useState({
@@ -18,8 +16,6 @@ export default function Signup() {
 
     const [created, setCreated] = useState(false);
 
-    // const [url, setUrl] = useState("helo");
-
     const handleChange = (e) => {
         setUser({
             ...userpost,
@@ -28,19 +24,16 @@ export default function Signup() {
     }
 
     const postEvent = async () => {
-
         try {
             const res = await axios.post('/register', userpost);
             console.log(res);
             window.alert(res.data.msg);
             setCreated(true);
         } catch (err) {
-
             console.log(err.response)
             window.alert(err.response.data.error);
             return;
         }
-
     }
 
     const onSubmit = (e) => {

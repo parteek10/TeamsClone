@@ -57,11 +57,4 @@ userSchema.methods.getAuthToken = async function () {
 
 const Register = new mongoose.model("Register", userSchema);
 
-// unique email validation
-// userSchema.path("email").validate(async (email) => {
-//     const emailCount = await Register.countDocuments({ email: email });
-//     return (!emailCount);
-// }, "Email Already Exists");
-
-
 module.exports = Register;
