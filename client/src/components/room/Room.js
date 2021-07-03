@@ -32,7 +32,6 @@ const Video = (props) => {
     );
 }
 
-
 const videoConstraints = {
     height: window.innerHeight / 2,
     width: window.innerWidth / 2
@@ -101,12 +100,18 @@ const Room = (props) => {
     }, []);
 
     function createPeer(userToSignal, callerID, stream) {
-        const peer = new Peer({
-
+        const peer = new Peer(
+          {
             initiator: true,
             trickle: false,
             stream,
-        });
+          },
+          {
+            host: "/",
+            path: "/peer",
+            port: 8000,
+          }
+        );
 
         peer.on("signal", signal => {
             socketRef.current.emit("sending signal", { userToSignal, callerID, signal })

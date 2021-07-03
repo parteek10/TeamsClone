@@ -2,18 +2,27 @@ require('dotenv').config();
 const express = require("express");
 const http = require("http");
 const app = express();
-const server = http.createServer(app);
 const socket = require("socket.io");
-const { ExpressPeerServer } = require("peer");
 const shortid = require("shortid");
 
+const server = http.Server(app);
+const { ExpressPeerServer } = require("peer");
+
 const io = socket(server, {
-    cors: {
-        origin: "*",
-        methods: ["GET", "POST"],
-    },
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST"],
+  },
 });
 
+const port = process.env.PORT || 8000;
+const expServer = server.listen(port, () => {
+  console.log(`Server listening on port ${port}`);
+});
+
+const peerServer = ExpressPeerServer(expServer, {
+  path: "/peer",
+});
 
 const Register = require("./models/registers");
 const auth = require("./middleware/auth");
@@ -23,23 +32,13 @@ require("./db/conn")
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(express.urlencoded({ extended: false }));
+app.use(peerServer);
 
+app.use(express.urlencoded({ extended: false }));
 
 const users = {};
 
 const socketToRoom = {};
-
-const expServer = server.listen(process.env.PORT || 8000, () => console.log('server is running on port 8000'));
-
-
-const peerServer = ExpressPeerServer(expServer, {
-  path: "/peer",
-});
-
-peerServer.on("connection", (client) => {
-  console.log("Connected to peer server");
-});
 
 // const newMeet = (socket)=>{
 //     console.log("new meeting request");
@@ -51,7 +50,6 @@ peerServer.on("connection", (client) => {
 //         meetId,
 //     });
 // }
-
 
 // const joinMeetById = (client, userId, meetId, user) => {
 //     console.log(meetId,userId)
@@ -90,8 +88,6 @@ peerServer.on("connection", (client) => {
 //     }
 //   };
   
-
-
 io.on('connection', socket => {
 
     socket.on("join room", roomID => {
@@ -131,7 +127,6 @@ io.on('connection', socket => {
     });
 
 });
-
 
 app.get("/logout", auth, async (req, res) => {
     try {
@@ -174,7 +169,6 @@ app.post("/register", async (req, res) => {
     }
 })
 
-
 app.post("/user/login", async (req, res) => {
     try {
         const email = req.body.email;
@@ -205,10 +199,6 @@ app.post("/user/login", async (req, res) => {
     }
 })
 
-
-
-
-
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
     const path = require('path');
@@ -216,4 +206,3 @@ if (process.env.NODE_ENV === "production") {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     })
 }
-
