@@ -32,7 +32,7 @@ export default function Signin() {
                 return;
             }
 
-            window.alert(res.data.messsage);
+            window.alert(res.data);
 
             authenticate({
                 token:

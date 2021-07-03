@@ -4,6 +4,9 @@ const http = require("http");
 const app = express();
 const server = http.createServer(app);
 const socket = require("socket.io");
+const { ExpressPeerServer } = require("peer");
+const shortid = require("shortid");
+
 const io = socket(server, {
     cors: {
         origin: "*",
@@ -27,16 +30,78 @@ const users = {};
 
 const socketToRoom = {};
 
+const expServer = server.listen(process.env.PORT || 8000, () => console.log('server is running on port 8000'));
+
+
+const peerServer = ExpressPeerServer(expServer, {
+  path: "/peer",
+});
+
+peerServer.on("connection", (client) => {
+  console.log("Connected to peer server");
+});
+
+// const newMeet = (socket)=>{
+//     console.log("new meeting request");
+    
+//     const meetId = shortid.generate();
+//     socketToRoom.add(meetId);
+//     users[meetId] = []
+//     socket.emit("newMeeting", {
+//         meetId,
+//     });
+// }
+
+
+// const joinMeetById = (client, userId, meetId, user) => {
+//     console.log(meetId,userId)
+//     if (meetId && socketToRoom.has(meetId)) {
+//       users[meetId].push(user);
+//       client.join(meetId);
+//       if (userId && user) {
+//         client.emit("joined-meeting", users[meetId]);
+//         client.broadcast.to(meetId).emit("user-connected", {
+//           userId,
+//           user,
+//           users: users[meetId],
+//         });
+//       }
+//     } else {
+//       client.emit("user-connected", { error: "Invalid meeting link" });
+//     }
+//   };
+
+//   const leaveMeet = (client, data) => {
+//     if (data.meetId && socketToRoom.has(data.meetId)) {
+//       if (users[data.meetId]) {
+//         users[data.meetId].splice(
+//           users[data.meetId].indexOf(data.user),
+//           1
+//         );
+//         client.broadcast
+//           .to(data.meetId)
+//           .emit(
+//             "user-disconnected",
+//             data.id,
+//             data.user,
+//             users[data.meetId]
+//           );
+//       }
+//     }
+//   };
+  
+
+
 io.on('connection', socket => {
 
     socket.on("join room", roomID => {
 
         if (users[roomID]) {
-            const length = users[roomID].length;
-            if (length === 4) {
-                socket.emit("room full");
-                return;
-            }
+            // const length = users[roomID].length;
+            // if (length === 4) {
+            //     socket.emit("room full");
+            //     return;
+            // }
             users[roomID].push(socket.id);
         } else {
             users[roomID] = [socket.id];
@@ -62,6 +127,7 @@ io.on('connection', socket => {
             room = room.filter(id => id !== socket.id);
             users[roomID] = room;
         }
+        socket.broadcast.emit("user left", socket.id);
     });
 
 });
@@ -115,17 +181,20 @@ app.post("/user/login", async (req, res) => {
         const password = req.body.password;
 
         const user = await Register.findOne({ email });
+        console.log("hwllo");
+        console.log(user);
+
         const token = await user.getAuthToken();
 
         res.cookie("jwt", token, {
             expires: new Date(Date.now() + 400000),
             httpOnly: true
         });
-
-        const isMatch = await bcrypt.compare(password, user.password);
         
+        const isMatch = await bcrypt.compare(password, user.password);
+
         if (isMatch == true) {
-            res.status(200).json({ isMatch, token })
+            res.status(200).json({ isMatch, token  })
         } else {
             res.status(201).send("wrong login credentials")
         }
@@ -137,7 +206,8 @@ app.post("/user/login", async (req, res) => {
 })
 
 
-server.listen(process.env.PORT || 8000, () => console.log('server is running on port 8000'));
+
+
 
 if (process.env.NODE_ENV === "production") {
     app.use(express.static("client/build"));
@@ -146,3 +216,4 @@ if (process.env.NODE_ENV === "production") {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     })
 }
+

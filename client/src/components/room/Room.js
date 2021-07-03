@@ -46,7 +46,7 @@ const Room = (props) => {
     const roomID = props.match.params.roomID;
 
     useEffect(() => {
-        socketRef.current = io.connect("/");
+        socketRef.current = io.connect("http://localhost:8000");
         navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
 
             userVideo.current.srcObject = stream;
@@ -60,7 +60,10 @@ const Room = (props) => {
                         peerID: userID,
                         peer,
                     })
-                    peers.push(peer);
+                    peers.push({
+                        peerID: userID,
+                        peer,
+                    });
                 })
                 setPeers(peers);
             })
@@ -72,8 +75,23 @@ const Room = (props) => {
                     peer,
                 })
 
-                setPeers(users => [...users, peer]);
+                const peerObj = {
+                    peer,
+                    peerID: payload.callerID
+                }
+
+                setPeers(users => [...users, peerObj]);
             });
+
+            socketRef.current.on("user left", id => {
+                const peerObj = peersRef.current.find(p => p.peerID === id);
+                if (peerObj) {
+                    peerObj.peer.destroy();
+                }
+                const peers = peersRef.current.filter(p => p.pperID !== id);
+                peersRef.current = peers;
+                setPeers(peers);
+            })
 
             socketRef.current.on("receiving returned signal", payload => {
                 const item = peersRef.current.find(p => p.peerID === payload.id);
@@ -84,6 +102,7 @@ const Room = (props) => {
 
     function createPeer(userToSignal, callerID, stream) {
         const peer = new Peer({
+
             initiator: true,
             trickle: false,
             stream,
@@ -118,7 +137,7 @@ const Room = (props) => {
                 <StyledVideo muted ref={userVideo} autoPlay playsInline />
                 {peers.map((peer, index) => {
                     return (
-                        <Video key={index} peer={peer} />
+                        <Video key={peer.peerID} peer={peer.peer} />
                     );
                 })}
             </Container>
