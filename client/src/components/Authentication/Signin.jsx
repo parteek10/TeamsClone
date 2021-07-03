@@ -32,11 +32,12 @@ export default function Signin() {
                 return;
             }
 
-            window.alert(res.data);
+            console.log(res.data);
 
             authenticate({
                 token:
                     res.data.token,
+                user:res.data.user
             });
 
             setCreated(true);
