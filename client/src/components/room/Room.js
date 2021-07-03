@@ -6,7 +6,7 @@ import styled from "styled-components";
 import Base from "../Base/Base";
 import { isAuthenticated } from "../Authentication/auth";
 
-export const socket = io("http://localhost:8000");
+export const socket = io("https://vc-app93.herokuapp.com");
 
 const Container = styled.div`
   padding: 20px;
@@ -132,7 +132,7 @@ const Room = (props) => {
       {
         host: "/",
         path: "/peer",
-        port: 8000,
+        port: 443,
       }
     );
 
@@ -153,7 +153,7 @@ const Room = (props) => {
       {
         host: "/",
         path: "/peer",
-        port: 8000,
+        port: 443,
       }
     );
 
