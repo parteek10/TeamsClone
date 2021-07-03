@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
+import { useHistory, useParams } from "react-router-dom";
 import Peer from "simple-peer";
 import styled from "styled-components";
 import Base from "../Base/Base"
@@ -41,11 +42,12 @@ const Room = (props) => {
     const [peers, setPeers] = useState([]);
     const socketRef = useRef();
     const userVideo = useRef();
+    const history = useHistory();
     const peersRef = useRef([]);
     const roomID = props.match.params.roomID;
 
     useEffect(() => {
-        socketRef.current = io.connect("http://localhost:8000");
+        socketRef.current = io.connect("https://vc-app93.herokuapp.com");
         navigator.mediaDevices.getUserMedia({ video: videoConstraints, audio: true }).then(stream => {
 
             userVideo.current.srcObject = stream;
@@ -82,7 +84,9 @@ const Room = (props) => {
                 setPeers(users => [...users, peerObj]);
             });
 
+            
             socketRef.current.on("user left", id => {
+                console.log(id);
                 const peerObj = peersRef.current.find(p => p.peerID === id);
                 if (peerObj) {
                     peerObj.peer.destroy();
@@ -90,13 +94,19 @@ const Room = (props) => {
                 const peers = peersRef.current.filter(p => p.pperID !== id);
                 peersRef.current = peers;
                 setPeers(peers);
-            })
+            }) 
 
             socketRef.current.on("receiving returned signal", payload => {
                 const item = peersRef.current.find(p => p.peerID === payload.id);
                 item.peer.signal(payload.signal);
             });
         })
+
+        return () => {
+      history.go(0);
+    };
+
+
     }, []);
 
     function createPeer(userToSignal, callerID, stream) {
@@ -109,7 +119,7 @@ const Room = (props) => {
           {
             host: "/",
             path: "/peer",
-            port: 8000,
+            port: 443,
           }
         );
 
