@@ -9,13 +9,6 @@ import MenuIcon from '@material-ui/icons/Menu';
 import Grid from '@material-ui/core/Grid';
 import { NavLink, Link } from 'react-router-dom';
 import { isAuthenticated, signout } from '../Authentication/auth';
-function hello() {
-    var x = document.getElementById("hell");
-    if (x.className === "nav")
-        x.className += " collapse";
-    else
-        x.className = "nav";
-}
 
 const logout = () => {
     signout();
@@ -42,13 +35,9 @@ export default function NavBar() {
         <div className={classes.root}>
             <AppBar position="static" >
                 <Toolbar>
-                    {/* <IconButton edge="start" className={classes.menuButton} color="inherit" aria-label="menu">
-                        <MenuIcon />
-                    </IconButton> */}
                     <Typography variant="h6" className={classes.title}>
                         <Link to="/" className={classes.title}>TeamClone </Link>
                     </Typography>
-
 
                     <Grid spacing={3}>
                         {
@@ -61,7 +50,6 @@ export default function NavBar() {
                             isAuthenticated() && <Link onClick={logout} className=" left" ><Button color="secondary" variant="contained">Sign Out</Button></Link>
                         }
                     </Grid>
-
 
                 </Toolbar>
             </AppBar>

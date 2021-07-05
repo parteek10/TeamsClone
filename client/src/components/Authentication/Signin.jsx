@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -18,7 +17,8 @@ import axios from 'axios';
 import './style.css'
 import { Redirect } from 'react-router-dom';
 import Base from '../Base/Base';
-import { authenticate } from './auth';
+import { authenticate } from './auth/index';
+
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -63,7 +63,6 @@ export default function Signin() {
     const [created, setCreated] = useState(false);
 
     const handleChange = (event) => {
-        console.log(event);
         setUser({
             ...userpost,
             [event.target.name]: event.target.value
@@ -75,16 +74,17 @@ export default function Signin() {
         try {
             const res = await axios.post(`/user/login`, userpost);
             console.log(res);
-            if (res.data.error) {
-                window.alert(res.data.error);
+            if (res.data.isMatch === false) {
+                window.alert(res);
                 return;
             }
-
-            console.log(res.data);
+            else {
+                console.log(res.data);
+                window.alert(res.data.user.fname + " logged in successfully !!");
+            }
 
             authenticate({
-                token:
-                    res.data.token,
+                token: res.data.token,
                 user: res.data.user
             });
 
@@ -92,8 +92,8 @@ export default function Signin() {
 
         } catch (err) {
 
-            console.log(err.response.data);
-            window.alert(err.response.data.error);
+            console.log(err.response);
+            window.alert("wrong credentials");
 
             return;
         }
@@ -102,15 +102,18 @@ export default function Signin() {
 
     const onSubmit = (e) => {
         e.preventDefault();
-        if (userpost.email.trim() !== "" && userpost.password.trim !== "") {
-            postEvent();
+        userpost.email = userpost.email.trim();
+        userpost.password = userpost.password.trim();
+
+        if (userpost.email === "" || userpost.password === "") {
+            window.alert("All fields are compulsory");
+            return;
         }
-        else {
-            window.alert("User details are  empty");
-        }
+        postEvent();
     }
 
     if (created) {
+        window.alert("User logged in successfully");
         return <Redirect to="/"></Redirect>
     }
 

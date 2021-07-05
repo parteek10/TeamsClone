@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 mongoose
   .connect(
-    "mongodb+srv://moon_coder:PARTEEK93@cluster0.pgwxm.mongodb.net/meetClone?retryWrites=true&=majority",
+    process.env.DATABASE,
     {
       useNewUrlParser: true,
       useCreateIndex: true,

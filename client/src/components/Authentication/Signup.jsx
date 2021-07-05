@@ -49,6 +49,7 @@ const useStyles = makeStyles((theme) => ({
         margin: theme.spacing(3, 0, 2),
     },
 }));
+
 export default function Signup() {
     const classes = useStyles();
     const [userpost, setUser] = useState({
@@ -70,31 +71,47 @@ export default function Signup() {
     const postEvent = async () => {
         try {
             const res = await axios.post('/register', userpost);
-            console.log(res);
-            window.alert(res.data.msg);
+            console.log(res.data.message);
+            window.alert(res.data.message);
             setCreated(true);
         } catch (err) {
             console.log(err.response)
-            window.alert(err.response.data.error);
+            window.alert("Email address already exist , Sign In  or try using another email address ");
             return;
         }
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        if (userpost.email.trim() !== "" && userpost.password.trim !== "") {
-            postEvent();
+        userpost.email = userpost.email.trim();
+        userpost.password = userpost.password.trim();
+        userpost.fname = userpost.fname.trim();
+        userpost.lname = userpost.lname.trim();
+
+        if (userpost.email === "" || userpost.lname === "" || userpost.fname === "" || userpost.password === "") {
+            window.alert("All fields are compulsory");
+            return;
         }
-        else {
-            window.alert("User details are  empty");
+
+        const EmailPattern = /^[A-Za-z@._0-9]+$/;
+        if (!((userpost.email).match(EmailPattern) && (userpost.email).indexOf("@") !== -1 && (userpost.email).indexOf(".") !== -1 && (userpost.email).indexOf("@") + 2 < (userpost.email).indexOf("."))) {
+            window.alert("Enter correct Email Address");
+            return;
         }
+
+        var PswdPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{4,15}$/;
+        if ((userpost.password).match(PswdPattern) === false) {
+            window.alert("Password must contain atleast 8 characters with  uppercase , lowercase and special characters ")
+            return;
+        }
+
+        postEvent();
+
     }
 
     if (created) {
-        return <Redirect to="/"></Redirect>
+        return <Redirect to="/signin"></Redirect>
     }
-
-    console.log(userpost);
 
     return (
         <Base>

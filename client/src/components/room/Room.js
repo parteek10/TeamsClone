@@ -64,10 +64,10 @@ const Room = (props) => {
         userVideo.current.srcObject = stream;
         socket.emit("join room", { roomID, user });
 
-        socket.on("user-connected", ({user, usersInThisRoom}) => {
+        socket.on("user-connected", ({ user, usersInThisRoom }) => {
           console.log(user);
           console.log(usersInThisRoom);
-         
+
         });
 
         socket.on("all users", (users) => {
@@ -104,7 +104,7 @@ const Room = (props) => {
 
         socket.on("user left", (user) => {
           console.log(user);
-          const peerObj = peersRef.current.find((p) => p.socketId ===user.socketId);
+          const peerObj = peersRef.current.find((p) => p.socketId === user.socketId);
           if (peerObj) {
             peerObj.peer.destroy();
           }
@@ -171,7 +171,7 @@ const Room = (props) => {
       <Container>
         <StyledVideo muted ref={userVideo} autoPlay playsInline />
         {peers.map((peer, index) => {
-          
+
           return <Video key={peer.peerID} peer={peer.peer} />;
         })}
       </Container>
