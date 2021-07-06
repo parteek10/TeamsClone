@@ -42,12 +42,42 @@ const videoConstraints = {
 
 const Room = (props) => {
 	const [peers, setPeers] = useState([]);
+	const [userStream, setUserStream] = useState(null);
+	const videoStatus = useRef("enabled");
+	const audioStatus = useRef("enabled");
 	const socketRef = useRef();
 	const userVideo = useRef();
 	const history = useHistory();
 	const peersRef = useRef([]);
 	const roomID = props.match.params.roomID;
 
+	const toggleAudio = function () {
+		if (audioStatus.current === "enabled") {
+			userVideo.current.srcObject.getAudioTracks()[0].enabled = false;
+			audioStatus.current = "disabled";
+		}
+		else {
+			userVideo.current.srcObject.getAudioTracks()[0].enabled = true;
+			audioStatus.current = "enabled";
+		}
+		setUserStream(userVideo.current.srcObject);
+	}
+
+	const toggleVideo = function () {
+		if (videoStatus.current === "enabled") {
+			userVideo.current.srcObject.getVideoTracks()[0].enabled = false;
+			videoStatus.current = "disabled";
+		}
+		else {
+			userVideo.current.srcObject.getVideoTracks()[0].enabled = true;
+			videoStatus.current = "enabled";
+		}
+		setUserStream(userVideo.current.srcObject);
+	}
+
+	const endCall = function () {
+		socket.emit("disconnect");
+	}
 	useEffect(() => {
 		// peer disconnect on leave
 		return () => {
@@ -62,6 +92,8 @@ const Room = (props) => {
 			.then((stream) => {
 
 				userVideo.current.srcObject = stream;
+				setUserStream(stream);
+
 				socket.emit("join room", { roomID, user });
 
 				socket.on("user-connected", ({ user, usersInThisRoom }) => {
@@ -123,6 +155,9 @@ const Room = (props) => {
 					const item = peersRef.current.find((p) => p.peerID === payload.id);
 					item.peer.signal(payload.signal);
 				});
+			}).catch((err) => {
+				console.log(err);
+				window.alert("unable to get your media , try checking your camera connections ");
 			});
 	}, []);
 
@@ -180,7 +215,17 @@ const Room = (props) => {
 					return <Video key={peer.peerID} peer={peer.peer} name={peer.fname} />;
 				})}
 			</Container>
-
+			<div style={{ position: "fixed", bottom: "10px" }}>
+				<div style={{ height: "10vh", width: "10vw", display: "inline-block" }} >
+					<button onClick={toggleAudio}> click me audio </button>
+				</div>
+				<div style={{ height: "10vh", width: "10vw", display: "inline-block" }} >
+					<button onClick={toggleVideo} > click me video </button>
+				</div>
+				<div style={{ height: "10vh", width: "10vw", display: "inline-block" }} >
+					<button onClick={endCall} > click me end call </button>
+				</div>
+			</div>
 		</Base>
 	);
 };

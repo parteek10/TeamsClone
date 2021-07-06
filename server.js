@@ -39,7 +39,7 @@ const users = {};
 
 const socketToRoom = new Set();
 
-io.on("connection", (socket) => {	
+io.on("connection", (socket) => {
 	socket.on("newMeeting", () => {
 		const meetId = shortid.generate();
 		console.log("new meeting : ");
@@ -59,7 +59,7 @@ io.on("connection", (socket) => {
 		}
 
 		user['socketId'] = socket.id;
-		
+
 		console.log(`${user.fname} joined room ${roomID}`)
 		users[roomID].push(user);
 		socket.join(roomID);
