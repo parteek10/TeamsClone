@@ -15,7 +15,7 @@ exports.newMeeting = (socket)=>{
 
 }
 
-exports.joinMeetbyId=(socket,roomId,user)=>{
+exports.joinMeetbyId=(socket,roomID,user)=>{
 
     if (!socketToRoom.has(roomID)) {
       return socket.emit("error", { message: "invalid link" });
