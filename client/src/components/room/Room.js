@@ -6,6 +6,7 @@ import styled from "styled-components";
 import Base from "../Base/Base";
 import { isAuthenticated } from "../Authentication/auth/index";
 import Button from "@material-ui/core/Button";
+// import Container from "@material-ui/core/Container";
 import { makeStyles } from "@material-ui/core/styles";
 import CallEndIcon from "@material-ui/icons/CallEnd";
 import KeyboardVoiceIcon from "@material-ui/icons/KeyboardVoice";
@@ -17,6 +18,22 @@ import ChatIcon from "@material-ui/icons/Chat";
 import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MicOffIcon from "@material-ui/icons/MicOff";
+import Drawer from "@material-ui/core/Drawer";
+import clsx from "clsx";
+import List from "@material-ui/core/List";
+import Divider from "@material-ui/core/Divider";
+import ListItem from "@material-ui/core/ListItem";
+import ListItemIcon from "@material-ui/core/ListItemIcon";
+import ListItemText from "@material-ui/core/ListItemText";
+import InboxIcon from "@material-ui/icons/MoveToInbox";
+import MailIcon from "@material-ui/icons/Mail";
+import "./Room.css";
+
+import TextContainer from "./chat/TextContainer/TextContainer";
+import Messages from "./chat/Messages/Messages";
+import InfoBar from "./chat/InfoBar/InfoBar";
+import Input from "./chat/Input/Input";
+
 // export const socket = io("http://localhost:8000");
 export const socket = io("https://vc-app93.herokuapp.com");
 const useStyles = makeStyles((theme) => ({
@@ -34,6 +51,12 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "center",
     color: theme.palette.text.secondary,
   },
+  list: {
+    width: 450,
+  },
+  fullList: {
+    width: "auto",
+  },
 }));
 const Container = styled.div`
   padding: 20px;
@@ -45,8 +68,10 @@ const Container = styled.div`
 `;
 
 const StyledVideo = styled.video`
-  height: 40%;
-  width: 50%;
+  height: 70vh;
+  width: 100%;
+  border-radius: 5%;
+  //  box-shadow: 0 3px 5px 2px rgba(181, 99, 247, 0.3);
 `;
 
 const Video = (props) => {
@@ -68,6 +93,13 @@ const videoConstraints = {
 
 const Room = (props) => {
   const classes = useStyles();
+
+  const [name, setName] = useState("");
+  const [room, setRoom] = useState("");
+  const [users, setUsers] = useState("");
+  const [message, setMessage] = useState("");
+  const [messages, setMessages] = useState([]);
+
   const [peers, setPeers] = useState([]);
   const [userStream, setUserStream] = useState(null);
   const videoStatus = useRef("enabled");
@@ -240,6 +272,37 @@ const Room = (props) => {
 
     return peer;
   }
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
+
+  const toggleDrawer = (anchor, open) => (event) => {
+    setState({ ...state, [anchor]: open });
+  };
+
+  const list = (anchor) => (
+    <div
+      className={clsx(classes.list, {
+        [classes.fullList]: anchor === "top" || anchor === "bottom",
+      })}
+      role="presentation"
+    >
+      <div className="outerContainer">
+        <div className="container">
+          <InfoBar room={room} />
+          <Messages messages={messages} name={name} />
+          <Input
+            message={message}
+            setMessage={setMessage}
+            //   sendMessage={sendMessage}
+          />
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <Base>
@@ -249,7 +312,7 @@ const Room = (props) => {
           return <Video key={peer.peerID} peer={peer.peer} name={peer.fname} />;
         })}
       </Container>
-
+      <div></div>
       <Grid container alignItems="center" justify="center">
         <div style={{ position: "fixed", bottom: "20px" }}>
           <div
@@ -329,15 +392,25 @@ const Room = (props) => {
               display: "inline",
             }}
           >
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-            >
-              <IconButton className={classes.button} disableRibble>
-                <ChatIcon />
-              </IconButton>
-            </Button>
+            <React.Fragment key="right">
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={toggleDrawer("right", true)}
+              >
+                <IconButton className={classes.button} disableRibble>
+                  <ChatIcon />
+                </IconButton>
+              </Button>
+              <Drawer
+                anchor="right"
+                open={state["right"]}
+                onClose={toggleDrawer("right", false)}
+              >
+                {list("right")}
+              </Drawer>
+            </React.Fragment>
           </div>
         </div>
       </Grid>
