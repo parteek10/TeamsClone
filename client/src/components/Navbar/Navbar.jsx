@@ -8,7 +8,7 @@ import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import Grid from '@material-ui/core/Grid';
 import { NavLink, Link } from 'react-router-dom';
-import { isAuthenticated, signout } from '../Authentication/auth';
+import { isAuthenticated, signout } from '../Authentication/auth/index';
 
 const logout = () => {
     signout();
@@ -41,7 +41,7 @@ export default function NavBar() {
 
                     <Grid spacing={3}>
                         {
-                            !isAuthenticated() && <NavLink activeClassName="active" to="/signin" className=" left" > <Button variant="contained">Login</Button></NavLink>
+                            !isAuthenticated() && <NavLink activeClassName="active" to="/signin" className=" left" > <Button variant="contained">Sign In</Button></NavLink>
                         }
                         {
                             !isAuthenticated() && <NavLink to="/signup" activeClassName="active" className=" left" ><Button color="secondary" variant="contained">Sign Up</Button></NavLink>

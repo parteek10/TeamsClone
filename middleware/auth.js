@@ -1,7 +1,7 @@
 const jwt = require("jsonwebtoken")
 const Register = require("../models/registers");
 
-//to verify whether user is logged in or not 
+//to verify whethear user is logged in or not 
 const auth = async (req, res, next) => {
     try {
         const token = req.cookies.jwt;
@@ -10,14 +10,14 @@ const auth = async (req, res, next) => {
             token,
             process.env.SECRET_KEY
         );
-        console.log(verifyUser);
+        // console.log(verifyUser);
         const user = await Register.findOne({ _id: verifyUser._id });
-        console.log(user);
+        // console.log(user);
         req.user = user;
         req.token = token;
         next();
     } catch (err) {
-        res.status(403).send(err);
+        res.status(401).send(err);
     }
 }
 

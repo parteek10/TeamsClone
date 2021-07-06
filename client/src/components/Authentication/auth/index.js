@@ -19,12 +19,12 @@ export const signout = async () => {
       const res = await axios.get(`/logout`, config);
       localStorage.removeItem("jwt");
       if (res)
-        window.alert(`${res.data.firstname} logout success`);
+        window.alert(res.data.user.fname + " logged out successfully");
       window.location = "/";
 
     } catch (error) {
       console.log(error);
-      window.alert("session expired login again");
+      window.alert("Session expired SignIn again");
       localStorage.removeItem("jwt");
       window.location.reload();
       return;

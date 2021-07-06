@@ -70,13 +70,13 @@ export default function Signup() {
 
     const postEvent = async () => {
         try {
-            const res = await axios.post('/register', userpost);
+            const res = await axios.post('/user/signup', userpost);
             console.log(res.data.message);
             window.alert(res.data.message);
             setCreated(true);
         } catch (err) {
             console.log(err.response)
-            window.alert("Email address already exist , Sign In  or try using another email address ");
+            window.alert(err);
             return;
         }
     }
@@ -100,7 +100,7 @@ export default function Signup() {
         }
 
         var PswdPattern = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[^a-zA-Z0-9])(?!.*\s).{4,15}$/;
-        if ((userpost.password).match(PswdPattern) === false) {
+        if (!(userpost.password).match(PswdPattern)) {
             window.alert("Password must contain atleast 8 characters with  uppercase , lowercase and special characters ")
             return;
         }

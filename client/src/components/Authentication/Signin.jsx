@@ -72,7 +72,7 @@ export default function Signin() {
     const postEvent = async () => {
 
         try {
-            const res = await axios.post(`/user/login`, userpost);
+            const res = await axios.post(`/user/signin`, userpost);
             console.log(res);
             if (res.data.isMatch === false) {
                 window.alert(res);
@@ -113,7 +113,6 @@ export default function Signin() {
     }
 
     if (created) {
-        window.alert("User logged in successfully");
         return <Redirect to="/"></Redirect>
     }
 

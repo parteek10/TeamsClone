@@ -33,17 +33,16 @@ require("./db/conn");
 app.use(express.json());
 app.use(cookieParser());
 app.use(peerServer);
-
 app.use(express.urlencoded({ extended: false }));
 
 const users = {};
 
 const socketToRoom = new Set();
 
-io.on("connection", (socket) => {
+io.on("connection", (socket) => {	
 	socket.on("newMeeting", () => {
 		const meetId = shortid.generate();
-		console.log("new meet");
+		console.log("new meeting : ");
 		console.log(meetId);
 		users[meetId] = [];
 		socketToRoom.add(meetId);
@@ -56,19 +55,14 @@ io.on("connection", (socket) => {
 			return socket.emit("all users", { error: "invalid link" });
 		}
 		if (!user) {
-
 			return socket.emit("error");
-
 		}
-		console.log(socket.id);
+
 		user['socketId'] = socket.id;
-		console.log(roomID);
-		console.log(user);
+		
+		console.log(`${user.fname} joined room ${roomID}`)
 		users[roomID].push(user);
 		socket.join(roomID);
-
-		console.log(socketToRoom);
-		console.log(users[roomID]);
 
 		const usersInThisRoom = users[roomID].filter(
 			(people) => people._id !== user._id
@@ -83,7 +77,6 @@ io.on("connection", (socket) => {
 
 		socket.on("disconnect", () => {
 			console.log("disconnect");
-
 			console.log(socket.id);
 			let room = users[roomID];
 			if (room) {
@@ -114,13 +107,13 @@ app.get("/logout", auth, async (req, res) => {
 
 		const user = await req.user.save();
 
-		res.json({ message: "logout Success" });
+		res.status(200).json({ message: "logout Success", user });
 	} catch (error) {
 		res.status(400).send(error);
 	}
 });
 
-app.post("/register", async (req, res) => {
+app.post("/user/signup", async (req, res) => {
 
 	try {
 		const userData = new Register({
@@ -136,13 +129,13 @@ app.post("/register", async (req, res) => {
 
 		console.log(`${req.body.fname} registered succefully `)
 
-		res.json({ message: "You are registered successfully . Please Login to access the services", userData });
+		res.json({ message: "You are registered successfully . Please Sign In to access the services", userData });
 	} catch (err) {
 		res.status(403).send(err);
 	}
 });
 
-app.post("/user/login", async (req, res) => {
+app.post("/user/signin", async (req, res) => {
 	try {
 		const email = req.body.email;
 		const password = req.body.password;
