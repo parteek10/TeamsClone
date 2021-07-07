@@ -3,6 +3,7 @@ const Register = require("../models/registers");
 
 //to verify whethear user is logged in or not 
 const auth = async (req, res, next) => {
+    
     try {
         const token = req.cookies.jwt;
         console.log("token value is : " + token);

@@ -160,6 +160,7 @@ const Room = (props) => {
 
         //users contains list of all other users present in the room
         socket.on("all users", (data) => {
+          
           console.log(data);
 
           if (data.error) {
@@ -169,6 +170,7 @@ const Room = (props) => {
           }
           const users = data.usersInThisRoom;
           const chats = data.chatInThisRoom;
+          setMessages(chats);
 
           console.log(users);
           const peers = [];
@@ -191,6 +193,8 @@ const Room = (props) => {
         });
 
         socket.on("user joined", (payload) => {
+
+          console.log("user joined",payload);
           const peer = addPeer(payload.signal, payload.callerID, stream);
           peersRef.current.push({
             peerID: payload.callerID,
@@ -224,6 +228,7 @@ const Room = (props) => {
           );
           peersRef.current = peers;
           setPeers(peers);
+
         });
 
         socket.on("receiving returned signal", (payload) => {
@@ -260,7 +265,7 @@ const Room = (props) => {
 
     return peer;
   }
-
+  
   function addPeer(incomingSignal, callerID, stream) {
     const peer = new Peer(
       {
@@ -321,6 +326,13 @@ const Room = (props) => {
       </div>
     </div>
   );
+
+  useEffect(() => {
+
+    console.log(peers);
+    console.log(peersRef);
+   
+  }, [peers]);
 
   return (
     <Base>

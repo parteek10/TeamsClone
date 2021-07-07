@@ -25,6 +25,7 @@ exports.logoutUser = async (req, res) => {
 
     res.status(200).json({ message: "logout Success", user });
   } catch (error) {
+    console.log(error);
     res.status(400).send(error);
   }
 };
