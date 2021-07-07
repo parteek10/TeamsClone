@@ -12,29 +12,21 @@ import CallEndIcon from "@material-ui/icons/CallEnd";
 import KeyboardVoiceIcon from "@material-ui/icons/KeyboardVoice";
 import VideocamIcon from "@material-ui/icons/Videocam";
 import VideocamOffIcon from "@material-ui/icons/VideocamOff";
-import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import ChatIcon from "@material-ui/icons/Chat";
-import Typography from "@material-ui/core/Typography";
 import IconButton from "@material-ui/core/IconButton";
 import MicOffIcon from "@material-ui/icons/MicOff";
 import Drawer from "@material-ui/core/Drawer";
 import clsx from "clsx";
-import List from "@material-ui/core/List";
-import Divider from "@material-ui/core/Divider";
-import ListItem from "@material-ui/core/ListItem";
-import ListItemIcon from "@material-ui/core/ListItemIcon";
-import ListItemText from "@material-ui/core/ListItemText";
-import InboxIcon from "@material-ui/icons/MoveToInbox";
-import MailIcon from "@material-ui/icons/Mail";
+
 import "./Room.css";
-import TextContainer from "./chat/TextContainer/TextContainer";
+
 import Messages from "./chat/Messages/Messages";
 import InfoBar from "./chat/InfoBar/InfoBar";
 import Input from "./chat/Input/Input";
 
-export const socket = io("http://localhost:8000");
-// export const socket = io("https://vc-app93.herokuapp.com");
+// export const socket = io("http://localhost:8000");
+export const socket = io("https://vc-app93.herokuapp.com");
 const useStyles = makeStyles((theme) => ({
   button: {
     //margin: theme.spacing(1),
@@ -124,6 +116,7 @@ const Room = (props) => {
     setUserStream(userVideo.current.srcObject);
   };
 
+  const { token, user } = isAuthenticated();
   const toggleVideo = function () {
     if (videoStatus.current === "enabled") {
       userVideo.current.srcObject.getVideoTracks()[0].enabled = false;
@@ -147,7 +140,7 @@ const Room = (props) => {
   }, []);
 
   useEffect(() => {
-    const { token, user } = isAuthenticated();
+    
     navigator.mediaDevices
       .getUserMedia({ video: videoConstraints, audio: true })
       .then((stream) => {
@@ -215,6 +208,12 @@ const Room = (props) => {
           setPeers((users) => [...users, peerObj]);
         });
 
+        socket.on("receiveMessage",data=>{
+          console.log(data);
+          setMessages(data);
+
+        });
+
         socket.on("user left", (user) => {
           console.log(user);
           const peerObj = peersRef.current.find(
@@ -254,8 +253,8 @@ const Room = (props) => {
       {
         host: "/",
         path: "/peer",
-        port: 8000,
-        // port: 443,
+        // port: 8000,
+        port: 443,
       }
     );
 
@@ -276,8 +275,8 @@ const Room = (props) => {
       {
         host: "/",
         path: "/peer",
-        port: 8000,
-        // port: 443,
+        // port: 8000,
+        port: 443,
       }
     );
 
@@ -300,6 +299,12 @@ const Room = (props) => {
     setState({ ...state, [anchor]: open });
   };
 
+  const sendMessage=(event)=>{
+    event.preventDefault();
+    socket.emit("sendMessage",{message,user});
+    setMessage("");
+  }
+
   const list = (anchor) => (
     <div
       className={clsx(classes.list, {
@@ -310,11 +315,11 @@ const Room = (props) => {
       <div className="outerContainer">
         <div className="container">
           <InfoBar room={room} />
-          <Messages messages={messages} name={name} />
+          <Messages messages={messages} name={user.fname} />
           <Input
             message={message}
             setMessage={setMessage}
-            //   sendMessage={sendMessage}
+              sendMessage={sendMessage}
           />
         </div>
       </div>

@@ -62,3 +62,18 @@ exports.leaveMeeting=(socket,roomID,user)=>{
     socket.broadcast.to(roomID).emit("user left", user);
 
 }
+
+exports.sendMessage=(socket,text,user,roomID)=>{
+
+  if(roomID&&socketToRoom.has(roomID))
+  {
+    chats[roomID].push({
+      data:text,
+      name:user.fname
+    });
+
+    socket.emit("receiveMessage",chats[roomID]);
+    socket.broadcast.to(roomID).emit("receiveMessage",chats[roomID]);
+  }
+
+}
