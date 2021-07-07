@@ -30,6 +30,12 @@ exports.logoutUser = async (req, res) => {
   }
 };
 
+exports.verifyUser = async (req, res) => {
+
+  return res.status(200).json({user:req.user});
+  
+};
+
 exports.registerUser = async (req, res) => {
   try {
     const userData = new Register({
