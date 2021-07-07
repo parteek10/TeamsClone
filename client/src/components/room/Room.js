@@ -25,8 +25,8 @@ import Messages from "./chat/Messages/Messages";
 import InfoBar from "./chat/InfoBar/InfoBar";
 import Input from "./chat/Input/Input";
 
-// export const socket = io("http://localhost:8000");
-export const socket = io("https://vc-app93.herokuapp.com");
+export const socket = io("http://localhost:8000");
+// export const socket = io("https://vc-app93.herokuapp.com");
 const useStyles = makeStyles((theme) => ({
   button: {
     //margin: theme.spacing(1),
@@ -189,6 +189,10 @@ const Room = (props) => {
               lname: user.lname,
             });
           });
+          console.log("peer fileter1");
+          console.log(peers);
+          let uniquepeers=peers.filter((peer,index,ar)=>ar.indexOf(peer)===index)
+          console.log(uniquepeers);
           setPeers(peers);
         });
 
@@ -206,7 +210,14 @@ const Room = (props) => {
             peerID: payload.callerID,
           };
 
-          setPeers((users) => [...users, peerObj]);
+          setPeers((peers)=>[...peers,peerObj]);
+          console.log("peer fileter2");
+          console.log(peers);
+          let uniquepeers = peers.filter(
+             (peer, index, ar) => ar.indexOf(peer) === index
+          );
+          console.log(uniquepeers);
+          // setPeers(peers);
         });
 
         socket.on("receiveMessage", (data) => {
@@ -328,11 +339,9 @@ const Room = (props) => {
   );
 
   useEffect(() => {
-
     console.log(peers);
     console.log(peersRef);
-   
-  }, [peers]);
+  }, [peers,peersRef]);
 
   return (
     <Base>
