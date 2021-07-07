@@ -25,8 +25,8 @@ import Messages from "./chat/Messages/Messages";
 import InfoBar from "./chat/InfoBar/InfoBar";
 import Input from "./chat/Input/Input";
 
-export const socket = io("http://localhost:8000");
-// export const socket = io("https://vc-app93.herokuapp.com");
+// export const socket = io("http://localhost:8000");
+export const socket = io("https://vc-app93.herokuapp.com");
 const useStyles = makeStyles((theme) => ({
   button: {
     //margin: theme.spacing(1),
