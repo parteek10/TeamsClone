@@ -347,7 +347,7 @@ const Room = (props) => {
     <Base>
       <Container>
         <StyledVideo muted ref={userVideo} autoPlay playsInline />
-        {peers.map((peer, index) => {
+        {peersRef.current.map((peer, index) => {
           return <Video key={peer.peerID} peer={peer.peer} name={peer.fname} />;
         })}
       </Container>
