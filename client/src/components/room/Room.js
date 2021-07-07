@@ -242,8 +242,9 @@ const Room = (props) => {
             peerObj.peer.destroy();
           }
           const peers = peersRef.current.filter(
-            (p) => p.socketId === user.socketId
+            (p) => p.socketId !== user.socketId
           );
+
           peersRef.current = peers;
           setPeers(peers);
 
