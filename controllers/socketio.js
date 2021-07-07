@@ -10,6 +10,7 @@ exports.newMeeting = (socket)=>{
     console.log("new meeting : ");
     console.log(meetId);
     users[meetId] = [];
+    chats[meetId] = [];
     socketToRoom.add(meetId);
     socket.emit("newMeeting", meetId);
 
@@ -17,31 +18,40 @@ exports.newMeeting = (socket)=>{
 
 exports.joinMeetbyId=(socket,roomID,user)=>{
 
+    console.log("join meet by id",roomID);
+
     if (!socketToRoom.has(roomID)) {
-      return socket.emit("error", { message: "invalid link" });
+      return socket.emit("all users", {error: "invalid link" });
     }
     if (!user) {
-      return socket.emit("error",{message:"user not found"});
+      return socket.emit("all users",{error:"user not found"});
     }
 
     user["socketId"] = socket.id;
     console.log(`${user.fname} joined room ${roomID}`);
     users[roomID].push(user);
     socket.join(roomID);
-
+    
     const usersInThisRoom = users[roomID].filter(
-      (people) => people._id !== user._id
+      (people) => people.socketId !== user.socketId
     );
 
-    socket.emit("all users", usersInThisRoom);
+    const chatInThisRoom = chats[roomID];
+    socket.emit("all users", {usersInThisRoom,chatInThisRoom});
 
     socket.broadcast.to(roomID).emit("user-connected", {
       user,
       usersInThisRoom,
+      chatInThisRoom
     });
+
+    console.log("chats",chats[roomID]);
+    console.log("user",users[roomID]);
 }
 
 exports.leaveMeeting=(socket,roomID,user)=>{
+
+    console.log("leavemeeting",roomID,user);
 
     console.log(socket.id);
     let room = users[roomID];

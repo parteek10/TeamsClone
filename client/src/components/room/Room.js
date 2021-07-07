@@ -28,14 +28,13 @@ import ListItemText from "@material-ui/core/ListItemText";
 import InboxIcon from "@material-ui/icons/MoveToInbox";
 import MailIcon from "@material-ui/icons/Mail";
 import "./Room.css";
-
 import TextContainer from "./chat/TextContainer/TextContainer";
 import Messages from "./chat/Messages/Messages";
 import InfoBar from "./chat/InfoBar/InfoBar";
 import Input from "./chat/Input/Input";
 
-// export const socket = io("http://localhost:8000");
-export const socket = io("https://vc-app93.herokuapp.com");
+export const socket = io("http://localhost:8000");
+// export const socket = io("https://vc-app93.herokuapp.com");
 const useStyles = makeStyles((theme) => ({
   button: {
     //margin: theme.spacing(1),
@@ -138,7 +137,7 @@ const Room = (props) => {
     setUserStream(userVideo.current.srcObject);
   };
   const endCall = function () {
-    socket.emit("disconnect");
+    history.replace("/");
   };
   useEffect(() => {
     // peer disconnect on leave
@@ -157,13 +156,30 @@ const Room = (props) => {
 
         socket.emit("join room", { roomID, user });
 
-        socket.on("user-connected", ({ user, usersInThisRoom }) => {
-          console.log(`{user.fname} joined room ${roomID}`);
-          console.log(usersInThisRoom);
-        });
+        socket.on(
+          "user-connected",
+          ({ user, usersInThisRoom, chatInThisRoom }) => {
+            console.log("user connected");
+            console.log(`${user.fname} joined room ${roomID}`);
+            console.log(usersInThisRoom);
+            console.log(chatInThisRoom);
+          }
+        );
 
         //users contains list of all other users present in the room
-        socket.on("all users", (users) => {
+        socket.on("all users", (data) => {
+          console.log(data);
+
+          if(data.error)
+          {
+            console.log(data.error);
+            window.alert(data.error);
+            history.replace("/");
+            
+          }
+          const users=data.usersInThisRoom;
+          const chats = data.chatInThisRoom;
+          
           console.log(users);
           const peers = [];
           users.forEach((user) => {
@@ -202,8 +218,9 @@ const Room = (props) => {
         socket.on("user left", (user) => {
           console.log(user);
           const peerObj = peersRef.current.find(
-            (p) => p.socketId === user.socketId
+            (p) => p.peerID === user.socketId
           );
+          console.log(peerObj);
           if (peerObj) {
             peerObj.peer.destroy();
           }
@@ -237,8 +254,8 @@ const Room = (props) => {
       {
         host: "/",
         path: "/peer",
-        // port: 8000,
-        port: 443,
+        port: 8000,
+        // port: 443,
       }
     );
 
@@ -259,8 +276,8 @@ const Room = (props) => {
       {
         host: "/",
         path: "/peer",
-        // port: 8000,
-        port: 443,
+        port: 8000,
+        // port: 443,
       }
     );
 

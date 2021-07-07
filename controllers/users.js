@@ -1,10 +1,24 @@
+require("dotenv").config();
 const auth = require("../middleware/auth");
 const Register = require("../models/registers");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 exports.logoutUser = async (req, res) => {
+  // try {
+  //   req.user.tokens = req.user.tokens.filter((currEle) => {
+  //     return currEle.token != req.token;
+  //   });
+  //  logout for previous requeust
   try {
-    req.user.tokens = req.user.tokens.filter((currEle) => {
-      return currEle.token != req.token;
+    req.user.tokens = req.user.tokens.filter((token) => {
+      return jwt.verify(token.token, process.env.SECRET_KEY,(err,data)=>{
+        console.log(data);
+        if(!err&&token.token!=req.token)
+        {
+          return true;
+        }
+        return false;
+      });
     });
 
     const user = await req.user.save();
@@ -39,12 +53,12 @@ exports.registerUser = async (req, res) => {
     res.json({
       message:
         "You are registered successfully . Please Sign In to access the services",
-      user:publicDetails,
+      user: publicDetails,
     });
   } catch (err) {
     res.status(403).send(err);
   }
-}
+};
 
 exports.loginUser = async (req, res) => {
   try {
