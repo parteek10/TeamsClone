@@ -59,8 +59,8 @@ const Container = styled.div`
 `;
 
 const StyledVideo = styled.video`
-  height: 70vh;
-  width: 100%;
+  height: 40vh;
+  width: 50%;
   border-radius: 5%;
   //  box-shadow: 0 3px 5px 2px rgba(181, 99, 247, 0.3);
 `;
@@ -140,7 +140,6 @@ const Room = (props) => {
   }, []);
 
   useEffect(() => {
-    
     navigator.mediaDevices
       .getUserMedia({ video: videoConstraints, audio: true })
       .then((stream) => {
@@ -163,16 +162,14 @@ const Room = (props) => {
         socket.on("all users", (data) => {
           console.log(data);
 
-          if(data.error)
-          {
+          if (data.error) {
             console.log(data.error);
             window.alert(data.error);
             history.replace("/");
-            
           }
-          const users=data.usersInThisRoom;
+          const users = data.usersInThisRoom;
           const chats = data.chatInThisRoom;
-          
+
           console.log(users);
           const peers = [];
           users.forEach((user) => {
@@ -208,10 +205,9 @@ const Room = (props) => {
           setPeers((users) => [...users, peerObj]);
         });
 
-        socket.on("receiveMessage",data=>{
+        socket.on("receiveMessage", (data) => {
           console.log(data);
           setMessages(data);
-
         });
 
         socket.on("user left", (user) => {
@@ -299,11 +295,11 @@ const Room = (props) => {
     setState({ ...state, [anchor]: open });
   };
 
-  const sendMessage=(event)=>{
+  const sendMessage = (event) => {
     event.preventDefault();
-    socket.emit("sendMessage",{message,user});
+    socket.emit("sendMessage", { message, user });
     setMessage("");
-  }
+  };
 
   const list = (anchor) => (
     <div
@@ -319,7 +315,7 @@ const Room = (props) => {
           <Input
             message={message}
             setMessage={setMessage}
-              sendMessage={sendMessage}
+            sendMessage={sendMessage}
           />
         </div>
       </div>
