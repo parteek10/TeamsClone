@@ -222,7 +222,7 @@ const Room = (props) => {
             peerID: payload.callerID,
           };
 
-          setPeers(uniquePeers([...peers, peerObj]));
+          setPeers((peers)=>uniquePeers([...peers, peerObj]));
          
           // setPeers(peers);
         });
