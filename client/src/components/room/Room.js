@@ -116,6 +116,20 @@ const Room = (props) => {
     setUserStream(userVideo.current.srcObject);
   };
 
+  const uniquePeers = (peers)=>{
+
+    const result = [];
+    const map = new Map();
+    for (const peer of peers) {
+      if (!map.has(peer.peerID)) {
+        map.set(peer.peerID, true); // set any value to Map
+        result.push(peer);
+      }
+    }
+
+    return result;
+  }
+
   const { token, user } = isAuthenticated();
   const toggleVideo = function () {
     if (videoStatus.current === "enabled") {
@@ -182,6 +196,7 @@ const Room = (props) => {
               fname: user.fname,
               lname: user.lname,
             });
+            
             peers.push({
               peerID: user.socketId,
               peer,
@@ -189,11 +204,8 @@ const Room = (props) => {
               lname: user.lname,
             });
           });
-          console.log("peer fileter1");
-          console.log(peers);
-          let uniquepeers=peers.filter((peer,index,ar)=>ar.indexOf(peer)===index)
-          console.log(uniquepeers);
-          setPeers(peers);
+        
+          setPeers(uniquePeers(peers));
         });
 
         socket.on("user joined", (payload) => {
@@ -210,13 +222,8 @@ const Room = (props) => {
             peerID: payload.callerID,
           };
 
-          setPeers((peers)=>[...peers,peerObj]);
-          console.log("peer fileter2");
-          console.log(peers);
-          let uniquepeers = peers.filter(
-             (peer, index, ar) => ar.indexOf(peer) === index
-          );
-          console.log(uniquepeers);
+          setPeers(uniquePeers([...peers, peerObj]));
+         
           // setPeers(peers);
         });
 
@@ -347,7 +354,7 @@ const Room = (props) => {
     <Base>
       <Container>
         <StyledVideo muted ref={userVideo} autoPlay playsInline />
-        {peersRef.current.map((peer, index) => {
+        {peers.map((peer, index) => {
           return <Video key={peer.peerID} peer={peer.peer} name={peer.fname} />;
         })}
       </Container>
