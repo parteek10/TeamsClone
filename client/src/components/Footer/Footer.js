@@ -32,7 +32,7 @@ const Footer = () => {
   return (
     <footer className={classes.footer}>
       <Container maxWidth="lg">
-        <Grid container direction="column" style={{ margin: "1.2em 0" }}></Grid>
+        {/* <Grid container direction="column" style={{ margin: "1.2em 0" }}></Grid>
         <Grid
           item
           container
@@ -44,6 +44,13 @@ const Footer = () => {
             textDecoration: "none",
           }}
         >
+          <div style={{ marginBottom: "10px" }}>
+            <Typography className={classes.copylight}>
+              &copy; All rights reserved , Made with &hearts; by Parteek Jain
+            </Typography>
+          </div>
+        </Grid> */}
+        <Grid container justify="center" style={{ margin: "0.7em 0" }}>
           <Typography className={classes.copylight}>
             &copy; All rights reserved , Made with &hearts; by Parteek Jain
           </Typography>

@@ -41,56 +41,6 @@ const CreateRoom = (props) => {
                 <CardActionArea>
                   <CardMedia
                     className={classes.media}
-                    image="https://image.freepik.com/free-vector/meet-our-team-concept-landing-page_52683-11306.jpg"
-                    title="Join Room"
-                  />
-                  <CardContent>
-                    <Grid container justify="center">
-                      <Typography
-                        gutterBottom
-                        variant="h4"
-                        style={{ fontWeight: "200", fontFamily: "rockwell" }}
-                        component="h2"
-                      >
-                        Join Room
-                      </Typography>
-                    </Grid>
-                    {/* <Grid container justify="center">
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      component="p"
-                    >
-                      Paste your room link below and start enjoying seamless
-                      video call.
-                    </Typography>
-                  </Grid> */}
-                    <Grid container justify="center">
-                      <TextField
-                        fullWidth
-                        id="filled-textarea"
-                        label="link"
-                        placeholder="Placeholder"
-                        multiline
-                      />
-                    </Grid>
-                  </CardContent>
-                </CardActionArea>
-                <CardActions>
-                  <Grid container alignItems="center" justify="center">
-                    <Button variant="contained" color="primary">
-                      Join Room
-                    </Button>
-                  </Grid>
-                </CardActions>
-              </Card>
-            </Grid>
-
-            <Grid item xs={12} sm={6} lg={6} justify="center">
-              <Card className={classes.root}>
-                <CardActionArea>
-                  <CardMedia
-                    className={classes.media}
                     image="https://image.freepik.com/free-vector/meet-our-team-concept-landing-page_52683-12857.jpg"
                     title="Create your Room"
                   />
@@ -125,6 +75,45 @@ const CreateRoom = (props) => {
                       onClick={create}
                     >
                       Create room
+                    </Button>
+                  </Grid>
+                </CardActions>
+              </Card>
+            </Grid>
+            <Grid item xs={12} sm={6} lg={6} justify="center">
+              <Card className={classes.root}>
+                <CardActionArea>
+                  <CardMedia
+                    className={classes.media}
+                    image="https://image.freepik.com/free-vector/meet-our-team-concept-landing-page_52683-11306.jpg"
+                    title="Join Room"
+                  />
+                  <CardContent>
+                    <Grid container justify="center">
+                      <Typography
+                        gutterBottom
+                        variant="h4"
+                        style={{ fontWeight: "200", fontFamily: "rockwell" }}
+                        component="h2"
+                      >
+                        Join Room
+                      </Typography>
+                    </Grid>
+                    <Grid container justify="center">
+                      <TextField
+                        fullWidth
+                        id="filled-textarea"
+                        label="link"
+                        placeholder="Placeholder"
+                        multiline
+                      />
+                    </Grid>
+                  </CardContent>
+                </CardActionArea>
+                <CardActions>
+                  <Grid container alignItems="center" justify="center">
+                    <Button variant="contained" color="primary">
+                      Join Room
                     </Button>
                   </Grid>
                 </CardActions>
