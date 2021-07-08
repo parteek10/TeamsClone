@@ -18,7 +18,7 @@ import './style.css'
 import { Redirect } from 'react-router-dom';
 import Base from '../Base/Base';
 import { authenticate } from './auth/index';
-
+import Footer from "../Footer/Footer";
 const useStyles = makeStyles((theme) => ({
     paper: {
         marginTop: theme.spacing(8),
@@ -117,6 +117,7 @@ export default function Signin() {
     }
 
     return (
+        <>
         <Base>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
@@ -187,5 +188,7 @@ export default function Signin() {
                 </Box>
             </Container>
         </Base>
+        <Footer></Footer>
+        </>
     )
 }

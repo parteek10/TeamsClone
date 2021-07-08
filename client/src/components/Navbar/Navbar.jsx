@@ -49,6 +49,9 @@ const useStyles = makeStyles((theme) => ({
     title: {
         flexGrow: 1,
         color: "white",
+        fontSize:"4vh",
+        fontFamily:"papyrus",
+        fontWeight:"500"
 
     },
 }));

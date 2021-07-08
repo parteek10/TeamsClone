@@ -14,7 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import axios from 'axios';
 import './style.css'
-
+import Footer from "../Footer/Footer";
 import { Redirect } from 'react-router-dom';
 import Base from '../Base/Base';
 function Copyright() {
@@ -114,6 +114,7 @@ export default function Signup() {
     }
 
     return (
+        <>
         <Base>
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
@@ -211,5 +212,7 @@ export default function Signup() {
                 </Box>
             </Container>
         </Base>
+        <Footer></Footer>
+        </>
     )
 }
