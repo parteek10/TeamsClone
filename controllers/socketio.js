@@ -71,8 +71,11 @@ exports.sendMessage = (socket, text, user, roomID) => {
       name: user.fname
     });
 
-    socket.emit("receiveMessage", chats[roomID]);
-    socket.broadcast.to(roomID).emit("receiveMessage", chats[roomID]);
+    const message={data:text,user}
+    socket.emit("receiveMessage", { message, chat: chats[roomID] });
+    socket.broadcast
+      .to(roomID)
+      .emit("receiveMessage", { message, chat: chats[roomID] });
   }
 
 }
