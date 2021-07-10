@@ -5,6 +5,7 @@ export const authenticate = (data, next) => {
     localStorage.setItem("jwt", JSON.stringify(data));
     return;
   }
+  next();
 };
 
 export const signout = async () => {

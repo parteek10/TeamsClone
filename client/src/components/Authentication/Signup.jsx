@@ -89,13 +89,13 @@ export default function Signup() {
         userpost.lname = userpost.lname.trim();
 
         if (userpost.email === "" || userpost.lname === "" || userpost.fname === "" || userpost.password === "") {
-            window.alert("All fields are compulsory");
+            window.alert("all fields are required");
             return;
         }
 
         const EmailPattern = /^[A-Za-z@._0-9]+$/;
         if (!((userpost.email).match(EmailPattern) && (userpost.email).indexOf("@") !== -1 && (userpost.email).indexOf(".") !== -1 && (userpost.email).indexOf("@") + 2 < (userpost.email).indexOf("."))) {
-            window.alert("Enter correct Email Address");
+            window.alert("enter correct email address");
             return;
         }
 
@@ -115,104 +115,104 @@ export default function Signup() {
 
     return (
         <>
-        <Base>
-            <Container component="main" maxWidth="xs">
-                <CssBaseline />
-                <div className={classes.paper}>
-                    <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign up
-                    </Typography>
-                    <form className={classes.form} noValidate>
-                        <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="fname"
-                                    variant="outlined"
-                                    required
-                                    name="fname"
-                                    value={userpost.fname}
-                                    onChange={handleChange}
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                />
+            <Base>
+                <Container component="main" maxWidth="xs">
+                    <CssBaseline />
+                    <div className={classes.paper}>
+                        <Avatar className={classes.avatar}>
+                            <LockOutlinedIcon />
+                        </Avatar>
+                        <Typography component="h1" variant="h5">
+                            Sign up
+                        </Typography>
+                        <form className={classes.form} noValidate>
+                            <Grid container spacing={2}>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        autoComplete="fname"
+                                        variant="outlined"
+                                        required
+                                        name="fname"
+                                        value={userpost.fname}
+                                        onChange={handleChange}
+                                        fullWidth
+                                        id="firstName"
+                                        label="First Name"
+                                        autoFocus
+                                    />
+                                </Grid>
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="lastName"
+                                        label="Last Name"
+                                        name="lname"
+                                        value={userpost.lname}
+                                        onChange={handleChange}
+                                        autoComplete="lname"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        id="email"
+                                        label="Email Address"
+                                        name="email"
+                                        value={userpost.email}
+                                        onChange={handleChange}
+                                        autoComplete="email"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <TextField
+                                        variant="outlined"
+                                        required
+                                        fullWidth
+                                        name="password"
+                                        value={userpost.password}
+                                        onChange={handleChange}
+                                        label="Password"
+                                        type="password"
+                                        id="password"
+                                        autoComplete="current-password"
+                                    />
+                                </Grid>
+                                <Grid item xs={12}>
+                                    <FormControlLabel
+                                        control={<Checkbox value="allowExtraEmails" color="primary" />}
+                                        label="I want to receive inspiration, marketing promotions and updates via email."
+                                    />
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lname"
-                                    value={userpost.lname}
-                                    onChange={handleChange}
-                                    autoComplete="lname"
-                                />
+                            <Button
+                                type="submit"
+                                fullWidth
+                                variant="contained"
+                                color="primary"
+                                onClick={onSubmit}
+                                className={classes.submit}
+                            >
+                                Sign Up
+                            </Button>
+                            <Grid container justify="flex-end">
+                                <Grid item>
+                                    <Link href="/signin" variant="body2">
+                                        Already have an account? Sign in
+                                    </Link>
+                                </Grid>
                             </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="email"
-                                    label="Email Address"
-                                    name="email"
-                                    value={userpost.email}
-                                    onChange={handleChange}
-                                    autoComplete="email"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    name="password"
-                                    value={userpost.password}
-                                    onChange={handleChange}
-                                    label="Password"
-                                    type="password"
-                                    id="password"
-                                    autoComplete="current-password"
-                                />
-                            </Grid>
-                            <Grid item xs={12}>
-                                <FormControlLabel
-                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                    label="I want to receive inspiration, marketing promotions and updates via email."
-                                />
-                            </Grid>
-                        </Grid>
-                        <Button
-                            type="submit"
-                            fullWidth
-                            variant="contained"
-                            color="primary"
-                            onClick={onSubmit}
-                            className={classes.submit}
-                        >
-                            Sign Up
-                        </Button>
-                        <Grid container justify="flex-end">
-                            <Grid item>
-                                <Link href="#" variant="body2">
-                                    Already have an account? Sign in
-                                </Link>
-                            </Grid>
-                        </Grid>
-                    </form>
-                </div>
-                <Box mt={5}>
-                    <Copyright />
-                </Box>
-            </Container>
-        </Base>
-        <Footer></Footer>
+                        </form>
+                    </div>
+                    <Box mt={5}>
+                        <Copyright />
+                    </Box>
+                </Container>
+            </Base>
+            <Footer></Footer>
         </>
     )
 }

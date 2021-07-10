@@ -49,7 +49,7 @@ userSchema.methods.getAuthToken = async function () {
             { _id: this._id },
             process.env.SECRET_KEY,
             {
-                expiresIn:process.env.expiresIn
+                expiresIn: process.env.expiresIn
             }
         );
 
