@@ -1,13 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 import io from "socket.io-client";
 import { useHistory, useParams } from "react-router-dom";
-
 import notification from "../../assets/notification.mp3";
 import styled from "styled-components";
 import Base from "../Base/Base";
 import { isAuthenticated } from "../Authentication/auth/index";
 import Button from "@material-ui/core/Button";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, useTheme } from "@material-ui/core/styles";
 import CallEndIcon from "@material-ui/icons/CallEnd";
 import KeyboardVoiceIcon from "@material-ui/icons/KeyboardVoice";
 import VideocamIcon from "@material-ui/icons/Videocam";
@@ -19,9 +18,7 @@ import MicOffIcon from "@material-ui/icons/MicOff";
 import Drawer from "@material-ui/core/Drawer";
 import clsx from "clsx";
 import { useSnackbar } from "react-simple-snackbar";
-
 import "./Room.css";
-
 import Messages from "./chat/Messages/Messages";
 import InfoBar from "./chat/InfoBar/InfoBar";
 import Input from "./chat/Input/Input";
@@ -29,11 +26,10 @@ import Video, { StyledDiv, Styledpara, StyledVideo } from "./Video";
 import { addPeer, createPeer, snackBaroptions, uniquePeers } from "./utils";
 import UIFx from "uifx";
 
-// export const socket = io("http://localhost:8000");
 export const socket = io("https://vc-app93.herokuapp.com");
 
 const sound = new UIFx(notification);
-
+const drawerWidth = 450;
 const useStyles = makeStyles((theme) => ({
   button: {
     borderRadius: "50%",
@@ -41,18 +37,57 @@ const useStyles = makeStyles((theme) => ({
     color: "white",
   },
   root: {
+    display: "flex",
+  },
+  appBar: {
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+  },
+  appBarShift: {
+    width: `calc(100% - ${drawerWidth}px)`,
+    transition: theme.transitions.create(["margin", "width"], {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: drawerWidth,
+  },
+  title: {
     flexGrow: 1,
   },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary,
+  hide: {
+    display: "none",
   },
-  list: {
-    width: 450,
+  drawer: {
+    width: drawerWidth,
+    flexShrink: 0,
   },
-  fullList: {
-    width: "auto",
+  drawerPaper: {
+    width: drawerWidth,
+  },
+  drawerHeader: {
+    display: "flex",
+    alignItems: "center",
+    padding: theme.spacing(0, 1),
+    ...theme.mixins.toolbar,
+    justifyContent: "flex-start",
+  },
+  content: {
+    flexGrow: 1,
+    padding: theme.spacing(3),
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    marginRight: -drawerWidth,
+  },
+  contentShift: {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginRight: 0,
   },
 }));
 
@@ -72,7 +107,6 @@ const videoConstraints = {
 };
 
 const Room = (props) => {
-
   const classes = useStyles();
   const [room, setRoom] = useState("");
   const [message, setMessage] = useState("");
@@ -89,6 +123,17 @@ const Room = (props) => {
   const roomID = props.match.params.roomID;
   const { user } = isAuthenticated();
 
+  const theme = useTheme();
+  const [open, setOpen] = React.useState(false);
+
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
+
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
+
   const [openSnackbar, closeSnackbar] = useSnackbar(snackBaroptions);
 
   useEffect(() => {
@@ -96,7 +141,7 @@ const Room = (props) => {
       history.go(0);
     };
   }, []);
-  
+
   const toggleAudio = function () {
     if (audioStatus.current === "enabled") {
       userVideo.current.srcObject.getAudioTracks()[0].enabled = false;
@@ -127,16 +172,15 @@ const Room = (props) => {
     history.replace("/");
   };
 
-   const [state, setState] = React.useState({
-     top: false,
-     left: false,
-     bottom: false,
-     right: false,
-   });
+  const [state, setState] = React.useState({
+    top: false,
+    left: false,
+    bottom: false,
+    right: false,
+  });
 
   // peer connections and video streams
   useEffect(() => {
-
     openSnackbar(`your meet id is : ${roomID}`);
 
     navigator.mediaDevices
@@ -209,24 +253,19 @@ const Room = (props) => {
           setPeers((peers) => uniquePeers([...peers, peerObj]));
         });
 
-        socket.on("receiveMessage", data => {
-
-          if(!(state.left||state.right||state.bottom||state.top))
-          {
+        socket.on("receiveMessage", (data) => {
+          if (!(state.left || state.right || state.bottom || state.top)) {
             sound.play();
             console.log(data);
-            const msguser= data.message.user;
-            const username=msguser.fname+" "+msguser.lname;
+            const msguser = data.message.user;
+            const username = msguser.fname + " " + msguser.lname;
             // if(msguser._id!=user._id)
             {
-              openSnackbar(`${username}: ${data?.message?.data}`)
-
+              openSnackbar(`${username}: ${data?.message?.data}`);
             }
           }
 
-          if(data.chat)
-          setMessages(data.chat);
-          
+          if (data.chat) setMessages(data.chat);
         });
 
         socket.on("user left", (user) => {
@@ -293,24 +332,44 @@ const Room = (props) => {
 
   return (
     <Base>
-      <Container>
-        <StyledDiv>
-          <StyledVideo muted ref={userVideo} autoPlay playsInline />
-          <Styledpara>{"you"}</Styledpara>
-        </StyledDiv>
-        {peers.map((peer, index) => {
-          return (
-            <Video
-              key={peer.peerID}
-              peer={peer.peer}
-              name={`${peer.fname} ${peer.lname}`}
-            />
-          );
-        })}
-      </Container>
-      <div></div>
+      <div className={classes.root}>
+        <main
+          className={clsx(classes.content, {
+            [classes.contentShift]: open,
+          })}
+        >
+          <div className={classes.drawerHeader} />
+          <Container>
+            <StyledDiv>
+              <StyledVideo muted ref={userVideo} autoPlay playsInline />
+              <Styledpara>{"you"}</Styledpara>
+            </StyledDiv>
+            {peers.map((peer, index) => {
+              return (
+                <Video
+                  key={peer.peerID}
+                  peer={peer.peer}
+                  name={`${peer.fname} ${peer.lname}`}
+                />
+              );
+            })}
+          </Container>
+          <div></div>
+        </main>
+        <Drawer
+          className={classes.drawer}
+          variant="persistent"
+          anchor="right"
+          open={open}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          {list("right")}
+        </Drawer>
+      </div>
       <Grid container alignItems="center" justify="center">
-        <div style={{ position: "fixed", bottom: "20px" }}>
+        <div style={{ position: "fixed", bottom: "20px", zIndex: "11" }}>
           <div
             style={{
               height: "10vh",
@@ -395,17 +454,28 @@ const Room = (props) => {
                 className={classes.button}
                 onClick={toggleDrawer("right", true)}
               >
-                <IconButton className={classes.button} disableRibble>
-                  <ChatIcon />
-                </IconButton>
+                {open === false ? (
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleDrawerOpen}
+                    className={clsx(open && classes.hide)}
+                    className={classes.button}
+                  >
+                    <ChatIcon />
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    color="inherit"
+                    aria-label="open drawer"
+                    onClick={handleDrawerClose}
+                    className={clsx(open && classes.hide)}
+                    className={classes.button}
+                  >
+                    <ChatIcon />
+                  </IconButton>
+                )}
               </Button>
-              <Drawer
-                anchor="right"
-                open={state["right"]}
-                onClose={toggleDrawer("right", false)}
-              >
-                {list("right")}
-              </Drawer>
             </React.Fragment>
           </div>
         </div>
