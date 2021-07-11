@@ -25,6 +25,10 @@ import Input from "./chat/Input/Input";
 import Video, { StyledDiv, Styledpara, StyledVideo } from "./Video";
 import { addPeer, createPeer, snackBaroptions, uniquePeers } from "./utils";
 import UIFx from "uifx";
+import onlineIcon from "./icons/onlineIcon.png";
+import CancelIcon from "@material-ui/icons/Cancel";
+import { Divider } from "@material-ui/core";
+import { Typography } from "@material-ui/core";
 
 export const socket = io("https://vc-app93.herokuapp.com");
 
@@ -88,6 +92,17 @@ const useStyles = makeStyles((theme) => ({
       duration: theme.transitions.duration.enteringScreen,
     }),
     marginRight: 0,
+  },
+  buttonSpace: {
+    position: "fixed",
+    bottom: "20px",
+    zIndex: "11",
+  },
+  footer: {
+    position: "fixed",
+    left: 0,
+    bottom: 0,
+    width: "100%",
   },
 }));
 
@@ -318,7 +333,21 @@ const Room = (props) => {
     >
       <div className="outerContainer">
         <div className="container">
-          <InfoBar room={room} />
+          <div className="infoBar">
+            <div className="leftInnerContainer">
+              <img className="onlineIcon" src={onlineIcon} alt="online icon" />
+              <h3 style={{ fontFamily: "serif" }}>CHAT</h3>
+            </div>
+            <div className="rightInnerContainer">
+              <IconButton
+                onClick={handleDrawerClose}
+                className={classes.button}
+                disableRibble
+              >
+                <CancelIcon />
+              </IconButton>
+            </div>
+          </div>
           <Messages messages={messages} name={user.fname} />
           <Input
             message={message}
@@ -368,118 +397,119 @@ const Room = (props) => {
           {list("right")}
         </Drawer>
       </div>
-      <Grid container alignItems="center" justify="center">
-        <div style={{ position: "fixed", bottom: "20px", zIndex: "11" }}>
-          <div
-            style={{
-              height: "10vh",
-              width: "10vw",
-              marginRight: "10px",
-              display: "inline",
-            }}
-          >
-            <Button
-              variant="contained"
-              color="primary"
-              className={classes.button}
-              onClick={toggleAudio}
-            >
-              {audioStatus.current === "enabled" ? (
-                <IconButton className={classes.button} disableRibble>
-                  <KeyboardVoiceIcon />
-                </IconButton>
-              ) : (
-                <IconButton className={classes.button} disableRibble>
-                  <MicOffIcon />
-                </IconButton>
-              )}
-            </Button>
-          </div>
-          <div
-            style={{
-              height: "10vh",
-              width: "10vw",
-              marginRight: "10px",
-              display: "inline",
-            }}
-          >
-            <Button
-              variant="contained"
-              color="secondary"
-              className={classes.button}
-              onClick={toggleVideo}
-            >
-              {videoStatus.current === "enabled" ? (
-                <IconButton className={classes.button} disableRibble>
-                  <VideocamIcon />
-                </IconButton>
-              ) : (
-                <IconButton className={classes.button} disableRibble>
-                  <VideocamOffIcon />
-                </IconButton>
-              )}
-            </Button>
-          </div>
-          <div
-            style={{
-              height: "10vh",
-              width: "10vw",
-              marginRight: "10px",
-              display: "inline",
-            }}
-          >
-            <Button
-              variant="contained"
-              color="secondary"
-              onClick={endCall}
-              className={classes.button}
-            >
-              <IconButton className={classes.button} disableRibble>
-                <CallEndIcon />
-              </IconButton>
-            </Button>
-          </div>
-          <div
-            style={{
-              height: "10vh",
-              width: "10vw",
-              marginRight: "10px",
-              display: "inline",
-            }}
-          >
-            <React.Fragment key="right">
-              <Button
-                variant="contained"
-                color="primary"
-                className={classes.button}
-                onClick={toggleDrawer("right", true)}
+
+       <Grid container alignItems="center" justify="center"> 
+            <div className={classes.buttonSpace}>
+              <div
+                style={{
+                  height: "10vh",
+                  width: "10vw",
+                  marginRight: "10px",
+                  display: "inline",
+                }}
               >
-                {open === false ? (
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerOpen}
-                    className={clsx(open && classes.hide)}
-                    className={classes.button}
-                  >
-                    <ChatIcon />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  className={classes.button}
+                  onClick={toggleAudio}
+                >
+                  {audioStatus.current === "enabled" ? (
+                    <IconButton className={classes.button} disableRibble>
+                      <KeyboardVoiceIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton className={classes.button} disableRibble>
+                      <MicOffIcon />
+                    </IconButton>
+                  )}
+                </Button>
+              </div>
+              <div
+                style={{
+                  height: "10vh",
+                  width: "10vw",
+                  marginRight: "10px",
+                  display: "inline",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  className={classes.button}
+                  onClick={toggleVideo}
+                >
+                  {videoStatus.current === "enabled" ? (
+                    <IconButton className={classes.button} disableRibble>
+                      <VideocamIcon />
+                    </IconButton>
+                  ) : (
+                    <IconButton className={classes.button} disableRibble>
+                      <VideocamOffIcon />
+                    </IconButton>
+                  )}
+                </Button>
+              </div>
+              <div
+                style={{
+                  height: "10vh",
+                  width: "10vw",
+                  marginRight: "10px",
+                  display: "inline",
+                }}
+              >
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  onClick={endCall}
+                  className={classes.button}
+                >
+                  <IconButton className={classes.button} disableRibble>
+                    <CallEndIcon />
                   </IconButton>
-                ) : (
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerClose}
-                    className={clsx(open && classes.hide)}
+                </Button>
+              </div>
+              <div
+                style={{
+                  height: "10vh",
+                  width: "10vw",
+                  marginRight: "10px",
+                  display: "inline",
+                }}
+              >
+                <React.Fragment key="right">
+                  <Button
+                    variant="contained"
+                    color="primary"
                     className={classes.button}
+                    onClick={toggleDrawer("right", true)}
                   >
-                    <ChatIcon />
-                  </IconButton>
-                )}
-              </Button>
-            </React.Fragment>
-          </div>
-        </div>
-      </Grid>
+                    {open === false ? (
+                      <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerOpen}
+                        className={clsx(open && classes.hide)}
+                        className={classes.button}
+                      >
+                        <ChatIcon />
+                      </IconButton>
+                    ) : (
+                      <IconButton
+                        color="inherit"
+                        aria-label="open drawer"
+                        onClick={handleDrawerClose}
+                        className={clsx(open && classes.hide)}
+                        className={classes.button}
+                      >
+                        <ChatIcon />
+                      </IconButton>
+                    )}
+                  </Button>
+                </React.Fragment>
+              </div>
+            </div>
+     </Grid>
     </Base>
   );
 };
