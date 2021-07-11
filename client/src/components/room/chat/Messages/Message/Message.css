@@ -12,6 +12,8 @@
   letter-spacing: 0;
   float: left;
   font-size: 1.1em;
+  text-transform: lowercase;
+  font-family: arial;
   word-wrap: break-word;
 }
 
@@ -29,7 +31,7 @@
 .sentText {
   display: flex;
   align-items: center;
-  font-family: Helvetica;
+  font-family: arial;
   color: #828282;
   letter-spacing: 0.3px;
 }
