@@ -33,9 +33,16 @@ This is a video calling web application where users can call other user and will
 - Snackbar : for notification alerts 
 - UIFX : to embed notification sounds
 
-## Step for Video Call 
+## how to start
 1. Open the web application [Vc-app](https://vc-app93.herokuapp.com/)
-2. 
+2. Sign in using your account , if you don't have any account sign up first 
+3. Create a new room 
+4. Send roomId of the room from URL to your friend 
+5. Ask your friend to join the room using that roomId 
+
+> Now enjoy wonderful video conversation 
+> Feel free to give your feedback on Email : parteekjain90340@gmail.com
+
 
 
 
